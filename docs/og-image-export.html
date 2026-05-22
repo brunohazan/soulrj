@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Soul RJ — OG Image Export</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #1a1815; }
+  canvas { display: block; width: 1200px; height: 630px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<script>
+const W = 1200, H = 630;
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+async function draw() {
+  await document.fonts.ready;
+
+  // Background
+  ctx.fillStyle = '#1a1815';
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle texture — faint grid lines
+  ctx.strokeStyle = 'rgba(244,239,228,0.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= W; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y <= H; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  const cx = W / 2;
+
+  // ── wordmark "soul rj." horizontal ──
+  const soulSize = 180;
+  const rjSize   = 180;
+
+  // measure pieces to center the full wordmark
+  ctx.font = `300 ${soulSize}px "Plus Jakarta Sans"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-0.04 * soulSize}px`;
+  const soulW = ctx.measureText('soul').width;
+
+  ctx.font = `600 ${rjSize}px "Plus Jakarta Sans"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-0.04 * rjSize}px`;
+  const rjW = ctx.measureText('rj').width;
+
+  const dotR      = 13;
+  const dotGap    = 10;
+  const totalW    = soulW + rjW + dotGap + dotR * 2;
+  const startX    = cx - totalW / 2;
+  const baselineY = H * 0.52;
+
+  // "soul"
+  ctx.save();
+  ctx.font = `300 ${soulSize}px "Plus Jakarta Sans"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-0.04 * soulSize}px`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = 'rgba(244, 239, 228, 0.82)';
+  ctx.fillText('soul', startX, baselineY);
+  ctx.restore();
+
+  // "rj"
+  ctx.save();
+  ctx.font = `600 ${rjSize}px "Plus Jakarta Sans"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-0.04 * rjSize}px`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#f4efe4';
+  ctx.fillText('rj', startX + soulW, baselineY);
+  ctx.restore();
+
+  // terracota dot
+  const dotCx = startX + soulW + rjW + dotGap + dotR;
+  const dotCy  = baselineY - 118;
+  ctx.fillStyle = '#b15a3c';
+  ctx.beginPath();
+  ctx.arc(dotCx, dotCy, dotR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // tagline
+  ctx.save();
+  ctx.font = `400 18px "JetBrains Mono"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '3.2px';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = 'rgba(244, 239, 228, 0.42)';
+  ctx.fillText('// gestão premium de temporada no rio', cx, baselineY + 62);
+  ctx.restore();
+
+  // metrics strip — bottom
+  const metrics = ['95% de ocupação', '4,99 ★ no Airbnb', 'Rio de Janeiro'];
+  const pillY = H - 52;
+  const pillH = 30;
+  const pillGap = 16;
+
+  // measure total width of pills
+  ctx.font = '400 13px "JetBrains Mono"';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '1.5px';
+  let totalPillW = 0;
+  const pillWidths = metrics.map(t => {
+    const tw = ctx.measureText(t).width;
+    totalPillW += tw + 32 + pillGap;
+    return tw;
+  });
+  totalPillW -= pillGap;
+
+  let pillX = cx - totalPillW / 2;
+  metrics.forEach((text, i) => {
+    const pw = pillWidths[i] + 32;
+    // pill bg
+    ctx.fillStyle = 'rgba(244, 239, 228, 0.07)';
+    ctx.beginPath();
+    ctx.roundRect(pillX, pillY - pillH + 6, pw, pillH, 4);
+    ctx.fill();
+    // pill text
+    ctx.save();
+    ctx.font = '400 13px "JetBrains Mono"';
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '1.5px';
+    ctx.fillStyle = 'rgba(244, 239, 228, 0.55)';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, pillX + 16, pillY - pillH / 2 + 6);
+    ctx.restore();
+    pillX += pw + pillGap;
+  });
+}
+
+draw();
+</script>
+</body>
+</html>
