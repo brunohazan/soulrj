@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul RJ — Gestão Premium de Imóveis por Temporada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --orange: #F4A261;
+            --orange-dark: #E08B3E;
+            --bg: #F5EFEB;
+            --dark: #1a1a1a;
+            --card: #ffffff;
+            --gray: #6b7280;
+            --radius: 20px;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--dark); overflow-x: hidden; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        /* NAV */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 32px; display: flex; align-items: center; justify-content: space-between; background: rgba(245,239,235,.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,.05); }
+        .logo { display: flex; align-items: center; gap: 0; font-weight: 900; font-size: 1.4rem; }
+        .logo img { height: 72px; width: auto; display: block; object-fit: contain; }
+        .nav-cta { background: var(--orange); color: #fff; padding: 10px 22px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: all .3s; }
+        .nav-cta:hover { background: var(--orange-dark); transform: scale(1.05); }
+
+        /* PARALLAX SECTIONS */
+        .parallax-section { position: relative; height: 100vh; min-height: 600px; overflow: hidden; }
+        .parallax-bg { position: absolute; inset: -20%; background-size: cover; background-position: center; background-attachment: fixed; z-index: 0; }
+        .parallax-overlay { position: absolute; inset: 0; z-index: 1; }
+        .parallax-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; text-align: center; padding: 24px; width: 90%; max-width: 820px; }
+
+        /* HERO */
+        .hero .parallax-bg { background-image: url('https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=1920&q=80'); }
+        .hero .parallax-overlay { background: linear-gradient(135deg, rgba(26,26,26,.7) 0%, rgba(26,26,26,.4) 100%); }
+        .hero .parallax-content h1 { font-size: clamp(2.2rem, 5.5vw, 3.8rem); font-weight: 900; color: #fff; line-height: 1.15; margin: 0 auto 20px; max-width: 700px; word-wrap: break-word; }
+        .hero .parallax-content h1 span { color: var(--orange); }
+        .hero .parallax-content p { font-size: 1.15rem; color: rgba(255,255,255,.8); max-width: 550px; margin: 0 auto 36px; word-wrap: break-word; }
+        .btn { display: inline-block; background: var(--orange); color: #fff; padding: 18px 36px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1rem; transition: all .3s; box-shadow: 0 8px 30px rgba(244,162,97,.35); }
+        .btn:hover { background: var(--orange-dark); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(244,162,97,.5); }
+
+        /* METRICS */
+        .metrics-section { padding: 80px 0; }
+        .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .metric { background: var(--card); border-radius: var(--radius); padding: 40px 28px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,.06); transition: transform .3s; }
+        .metric:hover { transform: translateY(-6px); }
+        .metric .number { font-size: 3rem; font-weight: 900; color: var(--orange); }
+        .metric .label { margin-top: 8px; color: var(--gray); font-size: 0.95rem; }
+
+        /* SUPERHOST BADGE */
+        .superhost-badge { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 32px; padding: 20px 28px; background: var(--card); border-radius: 50px; box-shadow: 0 4px 24px rgba(0,0,0,.06); flex-wrap: wrap; }
+        .superhost-badge span { font-weight: 700; font-size: 1.05rem; color: #FF5A5F; }
+        .superhost-badge small { color: var(--gray); font-size: 0.8rem; }
+
+        /* SECTION TITLES */
+        .section-title { text-align: center; padding: 80px 0 40px; }
+        .section-title h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; }
+        .section-title h2 span { color: var(--orange); }
+        .section-title p { color: var(--gray); margin-top: 10px; font-size: 1.05rem; }
+
+        /* PARALLAX MID */
+        .parallax-mid { height: 50vh; min-height: 350px; }
+        .parallax-mid .parallax-bg { background-image: url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=80'); }
+        .parallax-mid .parallax-overlay { background: linear-gradient(135deg, rgba(26,26,26,.6) 0%, rgba(26,26,26,.3) 100%); }
+        .parallax-mid .parallax-content h2 { font-size: clamp(1.5rem, 3.5vw, 2.5rem); font-weight: 800; color: #fff; }
+        .parallax-mid .parallax-content h2 span { color: var(--orange); }
+
+        /* PROBLEMS */
+        .problems { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; padding-bottom: 80px; }
+        .problem-card { background: var(--card); border-radius: var(--radius); padding: 36px; box-shadow: 0 4px 24px rgba(0,0,0,.06); transition: transform .3s; border-top: 4px solid transparent; }
+        .problem-card:hover { transform: translateY(-6px); border-top-color: var(--orange); }
+        .problem-card h3 { font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .problem-card p { color: var(--gray); font-size: 0.9rem; line-height: 1.5; }
+
+        /* SERVICES */
+        .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; padding-bottom: 80px; }
+        .service-card { background: var(--card); border-radius: var(--radius); padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,.06); transition: transform .3s; }
+        .service-card:hover { transform: translateY(-6px); }
+        .service-card h3 { font-size: 1.05rem; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+        .service-card ul { list-style: none; }
+        .service-card ul li { padding: 5px 0; color: var(--gray); font-size: 0.9rem; position: relative; padding-left: 18px; }
+        .service-card ul li::before { content: ""; position: absolute; left: 0; top: 13px; width: 7px; height: 7px; background: var(--orange); border-radius: 50%; }
+
+        /* TEAM */
+        .team { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; padding-bottom: 80px; }
+        .team-member { background: var(--card); border-radius: var(--radius); padding: 36px; text-align: center; width: 260px; box-shadow: 0 4px 24px rgba(0,0,0,.06); transition: transform .3s; }
+        .team-member:hover { transform: translateY(-6px); }
+        .team-photo { width: 110px; height: 110px; border-radius: 50%; background: #e5e5e5; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--gray); border: 4px solid var(--orange); }
+        .team-member h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .team-member p { color: var(--gray); font-size: 0.8rem; line-height: 1.5; }
+
+        /* TESTIMONIALS */
+        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; padding-bottom: 80px; }
+        .testimonial { background: var(--card); border-radius: var(--radius); padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,.06); position: relative; transition: transform .3s; }
+        .testimonial:hover { transform: translateY(-6px); }
+        .testimonial::before { content: "\201C"; font-size: 4rem; color: var(--orange); position: absolute; top: 8px; left: 24px; line-height: 1; opacity: .6; }
+        .testimonial p { font-size: 0.9rem; color: var(--gray); margin-top: 28px; font-style: italic; line-height: 1.6; }
+        .testimonial .author { margin-top: 18px; font-weight: 700; font-size: 0.9rem; color: var(--dark); }
+        .testimonial .date { font-size: 0.75rem; color: var(--orange); font-weight: 500; }
+
+        /* CTA FINAL PARALLAX */
+        .cta-parallax .parallax-bg { background-image: url('https://images.unsplash.com/photo-1619546952812-520e98064a52?w=1920&q=80'); }
+        .cta-parallax .parallax-overlay { background: linear-gradient(135deg, rgba(26,26,26,.75) 0%, rgba(26,26,26,.5) 100%); }
+        .cta-parallax { height: 60vh; min-height: 400px; }
+        .cta-parallax .parallax-content h2 { font-size: clamp(1.5rem, 3.5vw, 2.4rem); font-weight: 800; color: #fff; margin-bottom: 12px; }
+        .cta-parallax .parallax-content p { color: rgba(255,255,255,.8); margin-bottom: 28px; font-size: 1.05rem; }
+
+        /* FOOTER */
+        footer { background: var(--dark); color: rgba(255,255,255,.7); text-align: center; padding: 36px; font-size: 0.85rem; }
+        footer a { color: var(--orange); text-decoration: none; }
+
+        /* ANIMATIONS */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            nav { padding: 12px 16px; padding-top: env(safe-area-inset-top, 12px); }
+            .logo { font-size: 1.2rem; }
+            .logo img { height: 54px; }
+            .nav-cta { padding: 8px 16px; font-size: 0.8rem; }
+
+            .parallax-section { height: 85vh; min-height: 500px; height: 85dvh; }
+            .parallax-bg { background-attachment: scroll; inset: 0; }
+            .parallax-mid { height: 40vh; min-height: 250px; }
+            .cta-parallax { height: 55vh; min-height: 350px; }
+
+            .hero .parallax-content h1 { font-size: 1.8rem; }
+            .hero .parallax-content p { font-size: 1rem; margin-bottom: 28px; }
+            .btn { padding: 14px 28px; font-size: 0.9rem; }
+
+            .metrics-section { padding: 48px 0; }
+            .metrics { grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--card); border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,.06); overflow: hidden; }
+            .metric { padding: 20px 8px; box-shadow: none; border-radius: 0; border-right: 1px solid rgba(0,0,0,.06); }
+            .metric:last-child { border-right: none; }
+            .metric:hover { transform: none; }
+            .metric .number { font-size: 1.5rem; }
+            .metric .label { font-size: 0.7rem; }
+
+            .superhost-badge { margin-top: 16px; padding: 14px 16px; gap: 8px; }
+            .superhost-badge span { font-size: 0.9rem; }
+            .superhost-badge small { font-size: 0.7rem; text-align: center; width: 100%; }
+
+            .section-title { padding: 48px 0 24px; }
+            .section-title h2 { font-size: 1.4rem; }
+            .section-title p { font-size: 0.9rem; }
+
+            .problems { grid-template-columns: 1fr; gap: 16px; padding-bottom: 48px; }
+            .problem-card { padding: 24px; }
+
+            .services { grid-template-columns: 1fr; gap: 16px; padding-bottom: 48px; }
+            .service-card { padding: 24px; }
+
+            .team { gap: 16px; padding-bottom: 48px; }
+            .team-member { width: 100%; max-width: 300px; padding: 28px; }
+
+            .testimonials { grid-template-columns: 1fr; gap: 16px; padding-bottom: 48px; }
+            .testimonial { padding: 24px; }
+            .testimonial::before { font-size: 3rem; top: 4px; left: 16px; }
+            .testimonial p { margin-top: 22px; }
+
+            .cta-parallax .parallax-content h2 { font-size: 1.3rem; }
+            .cta-parallax .parallax-content p { font-size: 0.9rem; }
+
+            footer { padding: 24px 16px; padding-bottom: env(safe-area-inset-bottom, 24px); }
+        }
+
+        /* Small phones */
+        @media (max-width: 380px) {
+            .hero .parallax-content h1 { font-size: 1.5rem; }
+            .btn { padding: 12px 22px; font-size: 0.85rem; }
+            .metric .number { font-size: 1.3rem; }
+            .metric .label { font-size: 0.65rem; }
+        }
+
+        /* Touch feedback for mobile */
+        @media (hover: none) {
+            .metric:active, .problem-card:active, .service-card:active, .testimonial:active, .team-member:active {
+                transform: scale(0.97);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav>
+        <div class="logo">
+            <img src="docs/soullogo.png" alt="Soul RJ Stays">
+        </div>
+        <a href="https://wa.me/5521979751535" class="nav-cta">Fale Conosco</a>
+    </nav>
+
+    <!-- HERO PARALLAX -->
+    <section class="parallax-section hero">
+        <div class="parallax-bg"></div>
+        <div class="parallax-overlay"></div>
+        <div class="parallax-content">
+            <h1>Seu imóvel no Rio<br>rendendo <span>no máximo</span></h1>
+            <p>Gestão premium de locação por temporada. Cuidamos de tudo para você só acompanhar os resultados.</p>
+            <a href="https://wa.me/5521979751535?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20saber%20mais%20sobre%20a%20gest%C3%A3o%20do%20meu%20im%C3%B3vel" class="btn">Quero maximizar minha renda →</a>
+        </div>
+    </section>
+
+    <!-- METRICS -->
+    <section class="metrics-section">
+        <div class="container">
+            <div class="metrics">
+                <div class="metric fade-up">
+                    <div class="number">95%</div>
+                    <div class="label">Taxa de ocupação</div>
+                </div>
+                <div class="metric fade-up">
+                    <div class="number">+15</div>
+                    <div class="label">Imóveis sob administração</div>
+                </div>
+                <div class="metric fade-up">
+                    <div class="number">100%</div>
+                    <div class="label">Avaliações nota máxima no Airbnb</div>
+                </div>
+            </div>
+            <!-- SUPERHOST BADGE -->
+            <div class="superhost-badge fade-up">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+                    <path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z" fill="#FF5A5F"/>
+                </svg>
+                <span>Superhost Airbnb</span>
+                <small>Nota 4.8+ · 90%+ taxa de resposta · Menos de 1% cancelamento</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEMS -->
+    <div class="container">
+        <div class="section-title fade-up">
+            <h2>Por que gestoras comuns <span>não funcionam</span></h2>
+            <p>Os 3 erros que atrapalham a rentabilidade do seu imóvel</p>
+        </div>
+        <div class="problems">
+            <div class="problem-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg> Processos automatizados</h3>
+                <p>Atendimento robótico que reflete nas notas e afasta hóspedes qualificados</p>
+            </div>
+            <div class="problem-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/><path d="M2 20h20"/></svg> Precificação inadequada</h3>
+                <p>Preços estáticos que não acompanham demanda, eventos e sazonalidade</p>
+            </div>
+            <div class="problem-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Falta de excelência operacional</h3>
+                <p>Limpeza, manutenção e comunicação sem padrão de qualidade</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PARALLAX MID - APARTMENT VIEW -->
+    <section class="parallax-section parallax-mid">
+        <div class="parallax-bg"></div>
+        <div class="parallax-overlay"></div>
+        <div class="parallax-content">
+            <h2>Nosso diferencial: <span>gestão completa</span></h2>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <div class="container">
+        <div class="section-title fade-up">
+            <h2>Cuidamos de <span>cada detalhe</span></h2>
+            <p>Do anúncio à manutenção, tudo resolvido por quem entende</p>
+        </div>
+        <div class="services">
+            <div class="service-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Preparação do imóvel</h3>
+                <ul>
+                    <li>Diagnóstico do ambiente</li>
+                    <li>Fotos profissionais</li>
+                    <li>Criação de anúncios otimizados</li>
+                </ul>
+            </div>
+            <div class="service-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Relacionamento com o hóspede</h3>
+                <ul>
+                    <li>Atendimento pré e pós-reserva</li>
+                    <li>Suporte durante a estadia</li>
+                    <li>Solução de intercorrências</li>
+                </ul>
+            </div>
+            <div class="service-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg> Operação do dia a dia</h3>
+                <ul>
+                    <li>Lavanderia e gestão de enxoval</li>
+                    <li>Limpeza profissional a cada troca</li>
+                    <li>Reposição de itens de consumo</li>
+                    <li>Check-in presencial</li>
+                </ul>
+            </div>
+            <div class="service-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> Gestão financeira</h3>
+                <ul>
+                    <li>Precificação dinâmica</li>
+                    <li>Ajustes por demanda, eventos e feriados</li>
+                    <li>Relatórios de receita</li>
+                </ul>
+            </div>
+            <div class="service-card fade-up">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4A261" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg> Manutenção</h3>
+                <ul>
+                    <li>Preventiva e corretiva</li>
+                    <li>Fornecedores de confiança</li>
+                    <li>Gestão de consertos e revisões</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="container">
+        <div class="section-title fade-up">
+            <h2>Quem <span>cuida</span> do seu imóvel</h2>
+        </div>
+        <div class="team">
+            <div class="team-member fade-up">
+                <div class="team-photo">✕</div>
+                <h3>Lucas Gottschall</h3>
+                <p>Administrador de imóveis</p>
+            </div>
+            <div class="team-member fade-up">
+                <div class="team-photo">✕</div>
+                <h3>Rodrigo Gottschall</h3>
+                <p>Administrador de imóveis</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="container">
+        <div class="section-title fade-up">
+            <h2>O que nossos <span>hóspedes</span> dizem</h2>
+            <p>Hóspedes satisfeitos = mais reservas = mais renda pra você</p>
+        </div>
+        <div class="testimonials">
+            <div class="testimonial fade-up">
+                <p>Lucas foi um anfitrião incrível desde o momento da reserva. A casa é bonita, limpa, segura e em uma localização perfeita entre Copacabana e Ipanema. É altamente recomendável!</p>
+                <div class="author">Tamar</div>
+                <div class="date">Fevereiro 2024</div>
+            </div>
+            <div class="testimonial fade-up">
+                <p>Tivemos uma estadia fantástica! Ele foi o anfitrião perfeito, fornecendo excelentes recomendações e dicas. Acomodou um check-in antecipado e nos ajudou a organizar um traslado.</p>
+                <div class="author">Emma</div>
+                <div class="date">Março 2024</div>
+            </div>
+            <div class="testimonial fade-up">
+                <p>Ficamos em muitos Airbnbs e Lucas é o melhor anfitrião que já experimentamos. Se alguma vez voltarmos ao Rio, definitivamente ficaremos aqui novamente.</p>
+                <div class="author">Matt</div>
+                <div class="date">Julho 2024</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA FINAL PARALLAX -->
+    <section class="parallax-section cta-parallax">
+        <div class="parallax-bg"></div>
+        <div class="parallax-overlay"></div>
+        <div class="parallax-content">
+            <h2>Pronto para maximizar a renda do seu imóvel?</h2>
+            <p>Fale com a gente e descubra quanto seu apartamento pode render por temporada.</p>
+            <a href="https://wa.me/5521979751535?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20saber%20mais%20sobre%20a%20gest%C3%A3o%20do%20meu%20im%C3%B3vel" class="btn">Falar com a Soul RJ no WhatsApp →</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 Soul RJ — Gestão Premium de Imóveis por Temporada · <a href="https://wa.me/5521979751535">(21) 97975-1535</a></p>
+    </footer>
+
+    <script>
+        // Fade-up on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
