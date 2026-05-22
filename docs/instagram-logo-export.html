@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Soul RJ — Instagram Export</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1080px; overflow: hidden; background: #1a1815; }
+  canvas { display: block; width: 1080px; height: 1080px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1080"></canvas>
+
+<script>
+const S = 1080;
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+async function draw() {
+  await document.fonts.ready;
+
+  // Background quadrado (Instagram recorta em círculo automaticamente)
+  ctx.fillStyle = '#1a1815';
+  if (ctx.roundRect) {
+    ctx.beginPath();
+    ctx.roundRect(0, 0, S, S, 0);
+    ctx.fill();
+  } else {
+    ctx.fillRect(0, 0, S, S);
+  }
+
+  const cx = S / 2;
+
+  // ── "soul" — light 300 ──
+  const soulSize = 172;
+  ctx.save();
+  ctx.font = `300 ${soulSize}px "Plus Jakarta Sans"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-0.02 * soulSize}px`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = 'rgba(244, 239, 228, 0.82)';
+  ctx.fillText('soul', cx, 430);
+  ctx.restore();
+
+  // ── "rj" — semibold 600 ──
+  const rjSize = 432;
+  ctx.save();
+  ctx.font = `600 ${rjSize}px "Plus Jakarta Sans"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-0.05 * rjSize}px`;
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#f4efe4';
+
+  const rjMetrics = ctx.measureText('rj');
+  const rjW = rjMetrics.width;
+
+  const dotR    = 35;
+  const dotGap  = 24;
+  const totalW  = rjW + dotGap + dotR * 2;
+  const startX  = cx - totalW / 2;
+  const rjY     = 810;
+
+  ctx.fillText('rj', startX, rjY);
+  ctx.restore();
+
+  // ── ponto terracota ──
+  const dotCx = startX + rjW + dotGap + dotR;
+  const dotCy = rjY - 56;
+  ctx.fillStyle = '#b15a3c';
+  ctx.beginPath();
+  ctx.arc(dotCx, dotCy, dotR, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function download() {
+  const link = document.createElement('a');
+  link.download = 'soulrj-instagram.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+draw();
+</script>
+</body>
+</html>
