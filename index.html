@@ -6,7 +6,7 @@
 <title>Soul RJ — Operação premium de imóveis por temporada</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;600&display=swap">
 <script src="image-slot.js"></script>
 <style>
 :root{
@@ -64,8 +64,11 @@ header.nav{
   -webkit-backdrop-filter:saturate(160%) blur(14px);
   border:1px solid var(--line);border-radius:14px;
 }
-.brand{display:flex;align-items:center;gap:10px;font-size:15px;letter-spacing:-.01em;font-weight:500}
-.brand .logo-img{height:52px;width:auto;display:block;filter:invert(1)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .wm{font-family:"Plus Jakarta Sans",sans-serif;line-height:.9;display:inline-flex;align-items:baseline;color:var(--text)}
+.brand .wm .light{font-weight:300;letter-spacing:-.04em;font-size:32px}
+.brand .wm .bold{font-weight:600;letter-spacing:-.04em;font-size:32px}
+.brand .wm .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#b15a3c;margin-left:3px;transform:translateY(-3px)}
 .brand b{font-weight:600;letter-spacing:-.01em}
 .brand .tag{color:var(--text-mute);font-family:var(--mono);font-size:11px;margin-left:2px;letter-spacing:0;font-weight:400}
 nav.links{display:flex;gap:4px;font-family:var(--mono);font-size:12px;color:var(--text-dim)}
@@ -538,7 +541,7 @@ image-slot{
 <!-- ───── NAV ───── -->
 <header class="nav">
   <a href="#" class="brand">
-    <img src="docs/soullogo.png" alt="Soul RJ Stays" class="logo-img">
+    <span class="wm"><span class="light">soul</span><span class="bold">rj</span><span class="dot"></span></span>
   </a>
   <nav class="links">
     <a href="#operacao">Operação</a>
@@ -1161,7 +1164,7 @@ image-slot{
   <div class="inner">
     <div class="top">
       <div class="col-brand">
-        <div class="brand"><img src="docs/soullogo.png" alt="Soul RJ" class="logo-img" style="height:48px"><span style="margin-left:4px"><b>Soul RJ</b> <span class="tag">/ stays</span></span></div>
+        <div class="brand"><span class="wm"><span class="light">soul</span><span class="bold">rj</span><span class="dot"></span></span></div>
         <p>Operação premium de imóveis por temporada no Rio de Janeiro. Desde 2019, transformando apartamentos em ativos que rendem.</p>
       </div>
       <div>
