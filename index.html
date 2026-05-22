@@ -1365,10 +1365,19 @@ image-slot{
   // ───── Portfolio horizontal scroll ─────
   const rail = document.getElementById('portfolioRail');
   if(rail){
-    rail.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      rail.scrollLeft += e.deltaY !== 0 ? e.deltaY : e.deltaX;
-    }, {passive:false});
+    // Capture at document level so photos (pointer-events:none) don't block it.
+    // Only intercept vertical-dominant wheel when geometrically over the rail.
+    // When deltaX > deltaY (trackpad horizontal swipe), skip preventDefault
+    // so native horizontal scroll works normally.
+    document.addEventListener('wheel', (e) => {
+      const r = rail.getBoundingClientRect();
+      if(e.clientX < r.left || e.clientX > r.right ||
+         e.clientY < r.top  || e.clientY > r.bottom) return;
+      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+        e.preventDefault();
+        rail.scrollLeft += e.deltaY;
+      }
+    }, {passive:false, capture:true});
   }
 
   // ───── Portfolio arrows ─────
