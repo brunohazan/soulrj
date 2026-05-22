@@ -385,6 +385,19 @@ h2.h .mute{color:var(--text-mute);font-weight:400}
   scroll-snap-type:x mandatory;scrollbar-width:none;
 }
 .portfolio-rail::-webkit-scrollbar{display:none}
+.rail-wrap{position:relative}
+.rail-btn{
+  position:absolute;top:calc(50% - 20px);transform:translateY(-50%);z-index:10;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(15,15,18,.88);border:1px solid var(--line-2);
+  display:grid;place-items:center;color:var(--text-dim);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:background .3s var(--ease),border-color .3s var(--ease),color .3s var(--ease),opacity .3s var(--ease);
+}
+.rail-btn:hover{background:var(--lime);border-color:var(--lime);color:#0A0A0B}
+.rail-btn.prev{left:var(--pad)}
+.rail-btn.next{right:var(--pad)}
+.rail-btn:disabled{opacity:0;pointer-events:none}
 .prop{
   flex:0 0 clamp(300px, 28vw, 420px);scroll-snap-align:start;
   background:var(--bg-1);border:1px solid var(--line);border-radius:16px;overflow:hidden;
@@ -880,6 +893,8 @@ image-slot{
     <p>Copacabana · Ipanema · Leblon · Jardim Botânico · Lagoa · Botafogo. Cada listing operado e revisado por nós.</p>
   </div>
 
+  <div class="rail-wrap">
+  <button class="rail-btn prev" id="railPrev" aria-label="Anterior" disabled><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2 L4 7 L9 12"/></svg></button>
   <div class="portfolio-rail" id="portfolioRail">
     <article class="prop reveal">
       <div class="img">
@@ -960,6 +975,8 @@ image-slot{
         </div>
       </div>
     </article>
+  </div>
+  <button class="rail-btn next" id="railNext" aria-label="Próximo"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 2 L10 7 L5 12"/></svg></button>
   </div>
 </section>
 
@@ -1285,6 +1302,25 @@ image-slot{
       }
     }, {passive:false});
   }
+
+  // ───── Portfolio arrows ─────
+  const railPrev = document.getElementById('railPrev');
+  const railNext = document.getElementById('railNext');
+  function syncRailBtns(){
+    if(!rail) return;
+    railPrev.disabled = rail.scrollLeft <= 0;
+    railNext.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
+  }
+  if(railPrev) railPrev.addEventListener('click', () => {
+    const card = rail.querySelector('.prop');
+    rail.scrollBy({left: -(card ? card.offsetWidth + 18 : 360), behavior:'smooth'});
+  });
+  if(railNext) railNext.addEventListener('click', () => {
+    const card = rail.querySelector('.prop');
+    rail.scrollBy({left: card ? card.offsetWidth + 18 : 360, behavior:'smooth'});
+  });
+  if(rail) rail.addEventListener('scroll', syncRailBtns, {passive:true});
+  syncRailBtns();
 
   // ───── Weather — Open-Meteo (Rio de Janeiro / Copacabana) ─────
   (async () => {
