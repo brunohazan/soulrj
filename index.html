@@ -531,6 +531,7 @@ h2.h .mute{color:var(--text-mute);font-weight:400}
 .review{
   background:var(--bg-1);border:1px solid var(--line);border-radius:16px;
   padding:28px;display:flex;flex-direction:column;gap:20px;
+  flex:0 0 clamp(280px,26vw,400px);
   transition:border-color .4s var(--ease), transform .4s var(--ease);
 }
 .review:hover{border-color:var(--line-2);transform:translateY(-3px)}
@@ -747,7 +748,7 @@ image-slot{
 
     <div class="metric reveal reveal-d2">
       <div class="lbl"><span>NOTA AIRBNB</span><span class="pill">Superhost</span></div>
-      <div class="v"><span data-count="4.93">0</span></div>
+      <div class="v"><span data-count="4.99">0</span></div>
       <p class="desc">Avaliação média nos últimos 24 meses, considerando todas as plataformas.</p>
       <div style="display:flex;gap:4px;color:var(--lime);margin-top:auto">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
@@ -1266,20 +1267,102 @@ image-slot{
 </section>
 
 <!-- ───── TESTIMONIALS ───── -->
-<section class="block">
+<section class="block" style="padding-right:0">
   <div class="section-rule reveal">// 08 · Avaliações verificadas</div>
-  <div style="margin-bottom:48px;display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap" class="reveal">
+  <div style="margin-bottom:40px;display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-right:var(--pad)" class="reveal">
     <div>
       <span class="eyebrow">Airbnb · 24 meses</span>
       <h2 class="h">Hóspedes felizes =<br/>mais <em>reservas.</em></h2>
     </div>
     <div style="text-align:right;font-family:var(--mono);font-size:11px;color:var(--text-mute);letter-spacing:.04em">
-      <div style="font-family:var(--sans);font-size:64px;font-weight:500;color:var(--text);letter-spacing:-.03em;line-height:1">4.93<span style="color:var(--lime)">/5</span></div>
+      <div style="font-family:var(--sans);font-size:64px;font-weight:500;color:var(--text);letter-spacing:-.03em;line-height:1">4.99<span style="color:var(--lime)">/5</span></div>
       <div>NOTA MÉDIA · 449 AVALIAÇÕES</div>
     </div>
   </div>
 
-  <div class="reviews">
+  <div class="rail-wrap">
+    <button class="rail-btn prev" id="revPrev" aria-label="Anterior" disabled><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2 L4 7 L9 12"/></svg></button>
+    <div class="portfolio-rail" id="reviewRail">
+
+      <article class="review reveal">
+        <div class="stars">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        </div>
+        <p class="quote">"A viagem foi inesquecível e a hospedagem foi impecável. O apartamento tem tudo o que precisávamos, muito bem localizado, próximo da praia. Lucas enviou ótimas dicas e respondeu quase instantaneamente. Excelentes anfitriões."</p>
+        <div class="author">
+          <div><b>Anderson</b><div class="meta">São Paulo, Brasil</div></div>
+          <span class="src">3 dias atrás</span>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-d1">
+        <div class="stars">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        </div>
+        <p class="quote">"Ótimos anfitriões e um apartamento perfeito!"</p>
+        <div class="author">
+          <div><b>Fernanda</b><div class="meta">Petrópolis, Brasil</div></div>
+          <span class="src">1 semana atrás</span>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-d2">
+        <div class="stars">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        </div>
+        <p class="quote">"Días inolvidables en el apartamento de Lucas. Todo perfecto, impecable y comodísimo. Lo mejor: la ubicación — a pasitos de Copacabana y de Ipanema. ¡Volveremos!"</p>
+        <div class="author">
+          <div><b>María Inés</b><div class="meta">Argentina</div></div>
+          <span class="src">1 semana atrás</span>
+        </div>
+      </article>
+
+      <article class="review reveal">
+        <div class="stars">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        </div>
+        <p class="quote">"WHAT A HOST!!! Lucas was incredible, helpful and kind — he even helped after an airline lost my luggage, which truly saved our trip. I highly recommend reading his tips. We will be back!"</p>
+        <div class="author">
+          <div><b>Kyrstannie</b><div class="meta">San Francisco, EUA</div></div>
+          <span class="src">1 semana atrás</span>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-d1">
+        <div class="stars">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        </div>
+        <p class="quote">"Excellent apartment with jacuzzi and pool. Very clean and Lucas a fantastic host. Location is excellent at the heart of Copacabana with great views of the beach. Very nice place to which I will come back."</p>
+        <div class="author">
+          <div><b>Fred</b><div class="meta">San Francisco, EUA</div></div>
+          <span class="src">2 semanas atrás</span>
+        </div>
+      </article>
+
+    </div>
+    <button class="rail-btn next" id="revNext" aria-label="Próximo"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 2 L10 7 L5 12"/></svg></button>
+  </div>
+</section>
     <article class="review reveal">
       <div class="stars">
         <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
@@ -1318,10 +1401,40 @@ image-slot{
         <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
         <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
       </div>
+      <p class="quote">"Lucas foi o melhor anfitrião que tivemos durante toda a nossa estadia no Brasil. Realmente um anfitrião de diamantes!!"</p>
+      <div class="author">
+        <div><b>Emy</b><div class="meta">França · 7 noites</div></div>
+        <span class="src">Jun 24</span>
+      </div>
+    </article>
+
+    <article class="review reveal reveal-d1">
+      <div class="stars">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+      </div>
       <p class="quote">"Ficamos em muitos Airbnbs e Lucas é o melhor anfitrião que já experimentamos. Se voltarmos ao Rio, definitivamente ficaremos aqui novamente."</p>
       <div class="author">
         <div><b>Matt</b><div class="meta">Estados Unidos · 8 noites</div></div>
         <span class="src">Jul 24</span>
+      </div>
+    </article>
+
+    <article class="review reveal reveal-d2">
+      <div class="stars">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1 L12.4 7 L19 7.6 L14 12.1 L15.6 18.5 L10 15.2 L4.4 18.5 L6 12.1 L1 7.6 L7.6 7 Z"/></svg>
+      </div>
+      <p class="quote">"Apartamento impecável, exatamente como nas fotos. Lucas respondeu cada mensagem em minutos e o check-in presencial foi perfeito. Voltaremos com certeza."</p>
+      <div class="author">
+        <div><b>Sophie</b><div class="meta">Alemanha · 5 noites</div></div>
+        <span class="src">Set 24</span>
       </div>
     </article>
   </div>
@@ -1607,6 +1720,35 @@ image-slot{
       el.textContent = 'R$ ' + v.toLocaleString('pt-BR');
     });
   }, 3200);
+
+  // ───── Reviews carousel ─────
+  const revRail = document.getElementById('reviewRail');
+  const revPrev = document.getElementById('revPrev');
+  const revNext = document.getElementById('revNext');
+  function syncRevBtns(){
+    if(!revRail) return;
+    revPrev.disabled = revRail.scrollLeft <= 0;
+    revNext.disabled = revRail.scrollLeft + revRail.clientWidth >= revRail.scrollWidth - 4;
+  }
+  if(revPrev) revPrev.addEventListener('click', () => {
+    const card = revRail.querySelector('.review');
+    revRail.scrollBy({left: -(card ? card.offsetWidth + 18 : 360), behavior:'smooth'});
+  });
+  if(revNext) revNext.addEventListener('click', () => {
+    const card = revRail.querySelector('.review');
+    revRail.scrollBy({left: card ? card.offsetWidth + 18 : 360, behavior:'smooth'});
+  });
+  if(revRail){
+    revRail.addEventListener('scroll', syncRevBtns, {passive:true});
+    window.addEventListener('wheel', (e) => {
+      if(!revRail.closest('.rail-wrap').contains(e.target)) return;
+      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+        e.preventDefault();
+        revRail.scrollLeft += e.deltaY;
+      }
+    }, {passive:false, capture:true});
+  }
+  syncRevBtns();
 
   // ───── Mobile nav toggle ─────
   const burger = document.getElementById('navBurger');

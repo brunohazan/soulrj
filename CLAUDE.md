@@ -25,7 +25,7 @@ Gestão personalizada e de alto padrão, cuidando de cada detalhe da estadia par
 
 ## Métricas (Case Copacabana - 2024)
 - 95% taxa de ocupação (ano 2024 fechado)
-- 100% notas 5 (máximo) desde o início da gestão
+- Nota 4.99 no Airbnb (média geral do host)
 
 ## Depoimentos
 - **Tamar (Fev/2024):** "Lucas foi um anfitrião incrível desde o momento da reserva até que saímos... A casa é bonita, limpa, segura e em uma localização perfeita entre Copacabana e Ipanema..."
