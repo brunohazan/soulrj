@@ -1544,12 +1544,15 @@ image-slot{
   // ───── Portfolio horizontal scroll ─────
   const rail = document.getElementById('portfolioRail');
   if(rail){
-    rail.addEventListener('wheel', (e) => {
+    const railSection = rail.closest('section');
+    document.addEventListener('wheel', (e) => {
+      const r = railSection.getBoundingClientRect();
+      if(e.clientY < r.top || e.clientY > r.bottom) return;
       if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
         e.preventDefault();
         rail.scrollLeft += e.deltaY;
       }
-    }, {passive:false});
+    }, {passive:false, capture:true});
   }
 
   // ───── Portfolio arrows ─────
