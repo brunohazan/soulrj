@@ -296,6 +296,42 @@ h2.h .mute{color:var(--text-mute);font-weight:400}
 
 @media (max-width:980px){.diag-wrap{grid-template-columns:1fr}}
 
+/* ───── REVENUE COMPARE ───── */
+.rev-compare{margin-top:72px;padding-top:56px;border-top:1px solid var(--line)}
+.rev-head{margin-bottom:40px}
+.rev-head h2.h{margin:12px 0 14px}
+.rev-head .desc{color:var(--text-dim);font-size:16px;line-height:1.5;letter-spacing:-.005em}
+.rev-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.rev-card{background:var(--bg-1);border:1px solid var(--line);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:0}
+.rev-card.soul{border-color:rgba(214,255,61,.25);box-shadow:0 0 40px rgba(214,255,61,.05)}
+.rev-card-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.rev-card-head .clabel{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-mute)}
+.rev-card.soul .rev-card-head .clabel{color:var(--lime)}
+.rev-card-head .perf{font-family:var(--mono);font-size:10px;color:var(--lime);background:rgba(214,255,61,.1);border:1px solid rgba(214,255,61,.2);padding:4px 8px;border-radius:6px}
+.rev-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:28px;flex:1}
+.rev-list li{font-family:var(--mono);font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:10px}
+.rev-list li .xi{color:var(--danger);font-size:13px}
+.rev-list li .ck{color:var(--success);font-size:13px}
+.rev-amount .alabel{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-mute);display:block;margin-bottom:6px}
+.rev-amount .aval{font-size:30px;font-weight:600;letter-spacing:-.03em;color:var(--text-dim);line-height:1}
+.rev-card.soul .rev-amount .aval{color:var(--lime)}
+.rev-amount .aval small{font-size:13px;font-weight:400;margin-left:2px;color:var(--text-mute)}
+.rev-bars{background:var(--bg-1);border:1px solid var(--line);border-radius:16px;padding:24px 28px;display:flex;flex-direction:column;gap:14px;margin-bottom:16px;font-family:var(--mono)}
+.bar-row{display:grid;grid-template-columns:160px 1fr 44px;align-items:center;gap:14px}
+.bar-lbl{font-size:11px;color:var(--text-mute);letter-spacing:.04em}
+.bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;width:0;transition:width 1.5s cubic-bezier(.16,1,.3,1)}
+.bar-fill.common{background:rgba(255,255,255,.22)}
+.bar-fill.soul{background:var(--lime)}
+.bar-val{font-size:11px;color:var(--text-mute);text-align:right}
+.rev-loss{background:rgba(255,107,90,.05);border:1px solid rgba(255,107,90,.18);border-radius:16px;padding:28px}
+.rev-loss .llabel{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--danger);display:block;margin-bottom:16px}
+.rev-loss-nums{display:flex;gap:40px;align-items:baseline;margin-bottom:14px;flex-wrap:wrap}
+.rev-loss-nums .lval{font-size:36px;font-weight:600;letter-spacing:-.03em;color:var(--danger);line-height:1}
+.rev-loss-nums .lval small{font-size:13px;font-weight:400;margin-left:2px;color:rgba(255,107,90,.6)}
+.rev-loss p{font-size:13px;color:var(--text-dim);line-height:1.5;max-width:520px}
+@media(max-width:980px){.rev-split{grid-template-columns:1fr}.bar-row{grid-template-columns:120px 1fr 36px}.rev-loss-nums .lval{font-size:28px}}
+
 /* ───── METHOD / SERVICES ───── */
 .method-head{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:60px}
 .method-head p{font-size:16px;color:var(--text-dim);max-width:440px;justify-self:end;line-height:1.55;letter-spacing:-.005em}
@@ -709,7 +745,7 @@ image-slot{
 
     <div class="diag-side reveal reveal-d1">
       <span class="eyebrow">O problema</span>
-      <h2 class="h">Gestoras comuns custam <em>caro</em> — em receita perdida.</h2>
+      <h2 class="h">Operar mal custa <em>caro</em> — sozinho ou com a gestora errada.</h2>
       <p class="desc">A maioria opera como em 2015: planilha, telefone, fornecedor de bairro. O resultado é dinheiro que escorre todos os meses pela porta de saída.</p>
       <div class="diag-list">
         <div class="item">
@@ -730,6 +766,79 @@ image-slot{
       </div>
     </div>
   </div>
+
+  <!-- ───── revenue.compare ───── -->
+  <div class="rev-compare reveal">
+    <div class="rev-head">
+      <span class="eyebrow">// revenue.loss.compare</span>
+      <h2 class="h">Quanto uma operação comum <em>deixa na mesa.</em></h2>
+      <p class="desc">Mesmo imóvel. Mesma localização. Execução diferente.</p>
+    </div>
+
+    <div class="rev-split">
+      <!-- gestão comum -->
+      <div class="rev-card common">
+        <div class="rev-card-head">
+          <span class="clabel">Gestão comum</span>
+        </div>
+        <ul class="rev-list">
+          <li><span class="xi">✗</span> tarifa estática</li>
+          <li><span class="xi">✗</span> resposta lenta</li>
+          <li><span class="xi">✗</span> noites ociosas</li>
+          <li><span class="xi">✗</span> operação reativa</li>
+          <li><span class="xi">✗</span> manutenção corretiva</li>
+        </ul>
+        <div class="rev-amount">
+          <span class="alabel">Receita estimada</span>
+          <div class="aval">R$&nbsp;<span data-rev="7140">0</span><small>/mês</small></div>
+        </div>
+      </div>
+
+      <!-- soul rj -->
+      <div class="rev-card soul">
+        <div class="rev-card-head">
+          <span class="clabel">Soul RJ</span>
+          <span class="perf">+57% performance</span>
+        </div>
+        <ul class="rev-list">
+          <li><span class="ck">✓</span> pricing dinâmico</li>
+          <li><span class="ck">✓</span> resposta &lt; 5 min</li>
+          <li><span class="ck">✓</span> ocupação otimizada</li>
+          <li><span class="ck">✓</span> operação auditada</li>
+          <li><span class="ck">✓</span> manutenção preventiva</li>
+        </ul>
+        <div class="rev-amount">
+          <span class="alabel">Receita estimada</span>
+          <div class="aval">R$&nbsp;<span data-rev="11220">0</span><small>/mês</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- progress bars -->
+    <div class="rev-bars" id="revBars">
+      <div class="bar-row">
+        <span class="bar-lbl">Gestão comum</span>
+        <div class="bar-track"><div class="bar-fill common" style="--w:64%"></div></div>
+        <span class="bar-val">64%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-lbl">Soul RJ</span>
+        <div class="bar-track"><div class="bar-fill soul" style="--w:100%"></div></div>
+        <span class="bar-val">100%</span>
+      </div>
+    </div>
+
+    <!-- perda invisível -->
+    <div class="rev-loss">
+      <span class="llabel">potential.revenue.loss</span>
+      <div class="rev-loss-nums">
+        <div class="lval">−R$&nbsp;<span data-rev="4080">0</span><small>/mês</small></div>
+        <div class="lval">−R$&nbsp;<span data-rev="48960">0</span><small>/ano</small></div>
+      </div>
+      <p>Receita potencial que pode ficar na mesa com operação não otimizada.</p>
+    </div>
+  </div>
+
 </section>
 
 <!-- ───── METHOD ───── -->
@@ -1337,6 +1446,46 @@ image-slot{
     }
   }, {threshold:.4});
   counters.forEach(c => cIO.observe(c));
+
+  // ───── Revenue counters (BRL formatting) ─────
+  const revCounters = document.querySelectorAll('[data-rev]');
+  const revIO = new IntersectionObserver((entries) => {
+    for(const e of entries){
+      if(e.isIntersecting){
+        const el = e.target;
+        const target = parseInt(el.dataset.rev, 10);
+        const dur = 1800;
+        const start = performance.now();
+        const step = (now) => {
+          const t = Math.min(1, (now - start) / dur);
+          const eased = 1 - Math.pow(1 - t, 3);
+          const v = Math.round(target * eased);
+          el.textContent = v.toLocaleString('pt-BR');
+          if(t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+        revIO.unobserve(el);
+      }
+    }
+  }, {threshold:.4});
+  revCounters.forEach(c => revIO.observe(c));
+
+  // ───── Revenue bars animation ─────
+  const revBars = document.getElementById('revBars');
+  if(revBars){
+    const barIO = new IntersectionObserver((entries) => {
+      for(const e of entries){
+        if(e.isIntersecting){
+          e.target.querySelectorAll('.bar-fill').forEach(b => {
+            const w = b.style.getPropertyValue('--w').trim();
+            if(w) b.style.width = w;
+          });
+          barIO.unobserve(e.target);
+        }
+      }
+    }, {threshold:.3});
+    barIO.observe(revBars);
+  }
 
   // ───── Method accordion ─────
   const steps = document.querySelectorAll('.step');
