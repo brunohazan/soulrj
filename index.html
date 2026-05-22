@@ -527,7 +527,7 @@ h2.h .mute{color:var(--text-mute);font-weight:400}
 @media (max-width:720px){.stack{grid-template-columns:repeat(2,1fr)}.tile.span-2,.tile.span-3{grid-column:span 2}.tile.row-2{grid-row:span 1}}
 
 /* ───── TESTIMONIALS ───── */
-.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.reviews{display:contents}
 .review{
   background:var(--bg-1);border:1px solid var(--line);border-radius:16px;
   padding:28px;display:flex;flex-direction:column;gap:20px;
@@ -544,8 +544,7 @@ h2.h .mute{color:var(--text-mute);font-weight:400}
 .review .author .src{font-family:var(--mono);font-size:10px;color:var(--text-mute);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
 .review .author .src::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--lime)}
 
-@media (max-width:900px){.reviews{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:600px){.reviews{grid-template-columns:1fr}}
+
 
 /* ───── FOUNDERS ───── */
 .founders-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start}
