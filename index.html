@@ -683,7 +683,9 @@ image-slot{
         <span class="word"><span>para</span></span>
       </div>
       <div class="stack">
-        <span class="word"><span>imóveis </span></span>
+        <span class="word"><span>imóveis</span></span>
+      </div>
+      <div class="stack">
         <span class="word"><span><em>no Rio.</em></span></span>
       </div>
     </h1>
@@ -1542,19 +1544,12 @@ image-slot{
   // ───── Portfolio horizontal scroll ─────
   const rail = document.getElementById('portfolioRail');
   if(rail){
-    // Capture at document level so photos (pointer-events:none) don't block it.
-    // Only intercept vertical-dominant wheel when geometrically over the rail.
-    // When deltaX > deltaY (trackpad horizontal swipe), skip preventDefault
-    // so native horizontal scroll works normally.
-    document.addEventListener('wheel', (e) => {
-      const r = rail.getBoundingClientRect();
-      if(e.clientX < r.left || e.clientX > r.right ||
-         e.clientY < r.top  || e.clientY > r.bottom) return;
+    rail.addEventListener('wheel', (e) => {
       if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
         e.preventDefault();
         rail.scrollLeft += e.deltaY;
       }
-    }, {passive:false, capture:true});
+    }, {passive:false});
   }
 
   // ───── Portfolio arrows ─────
