@@ -5,8 +5,8 @@ Soul RJ. Empresa de gestão premium de imóveis por temporada (Airbnb).
 Objetivo da landing page: captar proprietários de apartamentos para entregar a gestão de locação de temporada.
 
 ## Fundadores
-- **Lucas Gottschall** — Administrador de imóveis, servidor público, oficial de justiça
-- **Rodrigo Gottschall** — Administrador de imóveis, servidor público, oficial de justiça
+- **Lucas Souto** — Administrador de imóveis, servidor público, oficial de justiça
+- **Rodrigo Souto** — Administrador de imóveis, servidor público, oficial de justiça
 
 ## Proposta de Valor
 Gestão personalizada e de alto padrão, cuidando de cada detalhe da estadia para atrair hóspedes qualificados, aumentar a ocupação e maximizar os lucros. Diferente das grandes gestoras que padronizam o atendimento, a abordagem é humana, próxima e eficiente.
