@@ -74,8 +74,9 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;600&display=swap">
-<script src="image-slot.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;600&display=swap"></noscript>
+<script src="image-slot.js" defer></script>
 <style>
 :root{
   --bg:        #0A0A0B;
@@ -994,7 +995,7 @@ image-slot{
 
     <div class="method-visual">
       <div class="frame active" data-frame="frame-1">
-        <img src="docs/Onboarding & curadoria.png" alt="Onboarding & curadoria">
+        <img src="docs/Onboarding & curadoria.avif" alt="Onboarding & curadoria" loading="lazy">
       </div>
       <div class="frame" data-frame="frame-2">
         <img src="https://images.unsplash.com/photo-1573014196346-87ac0314faf5?fm=jpg&q=80&w=1600&auto=format&fit=crop" alt="Detalhe de travesseiro branco — cuidado e hospitalidade">
@@ -1582,10 +1583,17 @@ image-slot{
   // ───── Hero parallax ─────
   const heroOrb = document.getElementById('heroOrb');
   const heroTitle = document.getElementById('heroTitle');
+  const heroEl = document.querySelector('.hero');
+  let heroVisible = true;
+  new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; }, {threshold:0}).observe(heroEl);
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = window.matchMedia('(max-width: 680px)').matches;
   function rafPar(){
-    const y = window.scrollY;
-    if(heroOrb) heroOrb.style.transform = `translate3d(${y*-0.08}px, ${y*0.4}px, 0)`;
-    if(heroTitle) heroTitle.style.transform = `translate3d(0, ${y*-0.06}px, 0)`;
+    if(heroVisible && !prefersReducedMotion && !isMobile){
+      const y = window.scrollY;
+      if(heroOrb) heroOrb.style.transform = `translate3d(${y*-0.08}px, ${y*0.4}px, 0)`;
+      if(heroTitle) heroTitle.style.transform = `translate3d(0, ${y*-0.06}px, 0)`;
+    }
     requestAnimationFrame(rafPar);
   }
   requestAnimationFrame(rafPar);
@@ -1722,7 +1730,11 @@ image-slot{
   // ───── Weather — Open-Meteo (Rio de Janeiro / Copacabana) ─────
   (async () => {
     const el = document.getElementById('weatherLine');
+    const CACHE_KEY = 'soulrj_weather';
+    const CACHE_TTL = 30 * 60 * 1000;
     try {
+      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      if(cached && Date.now() - cached.ts < CACHE_TTL){ el.textContent = cached.text; return; }
       const [weather, marine] = await Promise.all([
         fetch('https://api.open-meteo.com/v1/forecast?latitude=-22.9711&longitude=-43.1822&current=temperature_2m,wind_speed_10m,wind_direction_10m&daily=temperature_2m_min,temperature_2m_max&wind_speed_unit=kmh&timezone=America%2FSao_Paulo').then(r=>r.json()),
         fetch('https://marine-api.open-meteo.com/v1/marine?latitude=-22.9711&longitude=-43.1822&current=wave_height').then(r=>r.json())
@@ -1735,7 +1747,9 @@ image-slot{
       const dir   = dirs[Math.round(deg / 45) % 8];
       const wave  = marine.current.wave_height;
       const sea   = wave < 0.5 ? 'Mar calmo' : wave < 1.25 ? 'Mar pouco agitado' : wave < 2.5 ? 'Mar agitado' : 'Mar muito agitado';
-      el.textContent = `${tMin}° / ${tMax}° · ${sea} · Vento ${dir} ${wind}km/h`;
+      const text  = `${tMin}° / ${tMax}° · ${sea} · Vento ${dir} ${wind}km/h`;
+      el.textContent = text;
+      localStorage.setItem(CACHE_KEY, JSON.stringify({text, ts: Date.now()}));
     } catch {
       el.textContent = 'Rio de Janeiro · RJ';
     }
