@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Soul RJ — Post 01 · Copacabana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #080808;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      gap: 20px;
+    }
+
+    /* ─ Preview frame ─ */
+    .frame {
+      width: 540px;
+      height: 675px;
+      overflow: hidden;
+      border-radius: 10px;
+      flex-shrink: 0;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 24px 80px rgba(0,0,0,0.7),
+        0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    /* ═══════════════════════════════════════
+       CANVAS  1080 × 1350 px  (4:5 portrait)
+       ═══════════════════════════════════════ */
+    .post {
+      width: 1080px;
+      height: 1350px;
+      transform: scale(0.5);
+      transform-origin: top left;
+      background: #0A0A0B;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Geist', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Brand stripe ── */
+    .stripe {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #b15a3c 0%, #d4764e 60%, transparent 100%);
+      z-index: 20;
+    }
+
+    /* ── Dot grid (matches the site) ── */
+    .dot-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at 50% 85%, #000 20%, transparent 65%);
+    }
+
+    /* ── Full-bleed photo ── */
+    .photo {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+    }
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+    }
+
+    /* ── Gradient overlays ── */
+    /* Top vignette (for badges) */
+    .ov-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 400px;
+      z-index: 3;
+      background: linear-gradient(to bottom,
+        rgba(10,10,11,0.64) 0%,
+        rgba(10,10,11,0.20) 50%,
+        transparent 100%
+      );
+    }
+    /* Bottom vignette (for text) */
+    .ov-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 740px;
+      z-index: 3;
+      background: linear-gradient(to top,
+        rgba(10,10,11,1.00)   0%,
+        rgba(10,10,11,0.96)  20%,
+        rgba(10,10,11,0.85)  38%,
+        rgba(10,10,11,0.50)  55%,
+        transparent          72%
+      );
+    }
+    /* Warm terracotta glow */
+    .ov-glow {
+      position: absolute;
+      bottom: -80px; left: -120px;
+      width: 700px;
+      height: 700px;
+      z-index: 4;
+      background: radial-gradient(circle, rgba(177,90,60,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* ── Grain / film texture ── */
+    .grain {
+      position: absolute;
+      inset: 0;
+      z-index: 15;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      opacity: 0.07;
+    }
+
+    /* ── Content layer ── */
+    .content {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 56px 56px;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    /* Wordmark pill */
+    .wm {
+      display: inline-flex;
+      align-items: baseline;
+      background: rgba(10,10,11,0.55);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.09);
+      padding: 14px 24px;
+      border-radius: 999px;
+    }
+    .wm-soul {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 26px;
+      color: rgba(244,239,228,0.82);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .wm-rj {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      color: #f4efe4;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .wm-period {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      color: #b15a3c;
+      line-height: 1;
+      margin-left: 1px;
+    }
+
+    /* Rating + count pill */
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(10,10,11,0.55);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.09);
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-family: 'Geist Mono', monospace;
+    }
+    .r-star { color: #b15a3c; font-size: 20px; line-height: 1; }
+    .r-val  { font-size: 18px; font-weight: 500; color: #f4efe4; letter-spacing: 0.02em; }
+    .r-sep  { width: 1px; height: 16px; background: rgba(255,255,255,0.12); }
+    .r-cnt  { font-size: 13px; color: rgba(244,239,228,0.42); letter-spacing: 0.04em; }
+
+    /* ── Spacer ── */
+    .mid { flex: 1; }
+
+    /* ── BOTTOM SECTION ── */
+    .bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    /* Operational status tag */
+    .op-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: rgba(214,255,61,0.65);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .op-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #D6FF3D;
+      box-shadow: 0 0 0 4px rgba(214,255,61,0.15);
+      flex-shrink: 0;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(214,255,61,0.15); }
+      50%       { box-shadow: 0 0 0 10px rgba(214,255,61,0); }
+    }
+
+    /* Property name */
+    .prop-name {
+      font-family: 'Geist', sans-serif;
+      font-weight: 500;
+      font-size: 84px;
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+      color: #f4efe4;
+    }
+    .prop-name em {
+      display: block;
+      font-style: italic;
+      font-weight: 300;
+      color: rgba(244,239,228,0.55);
+      font-size: 76px;
+    }
+
+    /* Divider */
+    .rule { height: 1px; background: rgba(255,255,255,0.10); }
+
+    /* Stats row */
+    .stats { display: flex; }
+    .stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .stat + .stat {
+      border-left: 1px solid rgba(255,255,255,0.09);
+      padding-left: 38px;
+    }
+    .s-k {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: rgba(244,239,228,0.38);
+    }
+    .s-v {
+      font-family: 'Geist', sans-serif;
+      font-size: 42px;
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1;
+      color: #f4efe4;
+    }
+    .s-v.accent { color: #D6FF3D; }
+  </style>
+</head>
+<body>
+
+  <div class="frame">
+    <div class="post">
+
+      <!-- ── Brand stripe at top ── -->
+      <div class="stripe"></div>
+
+      <!-- ── Dot grid ── -->
+      <div class="dot-grid"></div>
+
+      <!-- ── Property photo ── -->
+      <div class="photo">
+        <img
+          src="../docs/100m da praia - Sofisticado e silencioso.avif"
+          alt="100m da praia · Sofisticado e silencioso · Copacabana"
+        >
+      </div>
+
+      <!-- ── Overlays ── -->
+      <div class="ov-top"></div>
+      <div class="ov-bottom"></div>
+      <div class="ov-glow"></div>
+
+      <!-- ── Grain / film ── -->
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg"
+           width="1080" height="1080" aria-hidden="true">
+        <filter id="noise" color-interpolation-filters="linearRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.72"
+                        numOctaves="4" stitchTiles="stitch"/>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise)"/>
+      </svg>
+
+      <!-- ── Content ── -->
+      <div class="content">
+
+        <!-- TOP BAR -->
+        <div class="top-bar">
+          <div class="wm">
+            <span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span>
+          </div>
+
+          <div class="rating">
+            <span class="r-star">★</span>
+            <span class="r-val">4,99</span>
+            <span class="r-sep"></span>
+            <span class="r-cnt">27 avaliações</span>
+          </div>
+        </div>
+
+        <div class="mid"></div>
+
+        <!-- BOTTOM -->
+        <div class="bottom">
+
+          <div class="op-tag">
+            <span class="op-pulse"></span>
+            // 01 · copacabana · -22.9711°, -43.1822° · ativo
+          </div>
+
+          <h2 class="prop-name">
+            100m da praia
+            <em>sofisticado e silencioso</em>
+          </h2>
+
+          <div class="rule"></div>
+
+          <div class="stats">
+            <div class="stat">
+              <span class="s-k">Quartos</span>
+              <span class="s-v">1</span>
+            </div>
+            <div class="stat">
+              <span class="s-k">Camas</span>
+              <span class="s-v">3</span>
+            </div>
+            <div class="stat">
+              <span class="s-k">Ocupação</span>
+              <span class="s-v accent">95%</span>
+            </div>
+            <div class="stat">
+              <span class="s-k">Reviews</span>
+              <span class="s-v">27</span>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /.content -->
+
+    </div><!-- /.post -->
+  </div><!-- /.frame -->
+
+  <p style="color:#333;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.06em">
+    soul rj. &nbsp;·&nbsp; post-01 &nbsp;·&nbsp; copacabana &nbsp;·&nbsp; 1080 × 1080 px
+  </p>
+
+</body>
+</html>
