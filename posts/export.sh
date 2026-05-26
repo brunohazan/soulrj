@@ -7,7 +7,7 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 POSTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 DESKTOP="$HOME/Desktop"
 
-posts=(post-01 post-02 post-03 post-04)
+posts=(post-01 post-02 post-03 post-04 post-05 post-06 post-07 post-08 post-09)
 
 for post in "${posts[@]}"; do
   src="$POSTS_DIR/${post}.html"

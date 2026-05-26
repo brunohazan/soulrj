@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Soul RJ — Post 07 · Pastel · Isso não é sorte. É operação.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --lime-pastel: #A8C96A; --dark-warm: #18150F; --terracotta: #b15a3c; --terracotta-2: #d4764e; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #080808; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; gap: 20px; }
+    .frame { width: 540px; height: 675px; overflow: hidden; border-radius: 10px; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 24px 80px rgba(0,0,0,0.7), 0 8px 24px rgba(0,0,0,0.4); }
+    .post { width: 1080px; height: 1350px; transform: scale(0.5); transform-origin: top left; background: #EDE8DF; position: relative; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .corner { position: absolute; width: 48px; height: 48px; z-index: 3; pointer-events: none; }
+    .corner-tl { top: 20px; left: 20px; border-top: 2px solid var(--lime-pastel); border-left: 2px solid var(--lime-pastel); }
+    .corner-tr { top: 20px; right: 20px; border-top: 2px solid var(--lime-pastel); border-right: 2px solid var(--lime-pastel); }
+    .corner-bl { bottom: 20px; left: 20px; border-bottom: 2px solid var(--lime-pastel); border-left: 2px solid var(--lime-pastel); }
+    .corner-br { bottom: 20px; right: 20px; border-bottom: 2px solid var(--lime-pastel); border-right: 2px solid var(--lime-pastel); }
+    .dot-grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: radial-gradient(rgba(24,21,15,0.08) 1px, transparent 1px); background-size: 32px 32px; mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 20%, transparent 100%); }
+    .glow { position: absolute; top: 30%; left: -10%; width: 800px; height: 800px; z-index: 1; background: radial-gradient(circle, rgba(184,92,62,0.07) 0%, transparent 60%); pointer-events: none; }
+    .grain { position: absolute; inset: 0; z-index: 15; pointer-events: none; mix-blend-mode: multiply; opacity: 0.045; }
+    .stripe { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--terracotta) 0%, var(--terracotta-2) 60%, transparent 100%); z-index: 20; }
+    .content { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; padding: 60px 80px 64px; }
+    .top-bar { display: flex; align-items: flex-start; justify-content: space-between; }
+    .wm { display: inline-flex; align-items: center; justify-content: center; background: rgba(237,232,223,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(168,201,106,0.6); padding: 14px 24px; border-radius: 999px; }
+    .wm-soul { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; font-size: 26px; color: rgba(24,21,15,0.55); letter-spacing: -0.04em; line-height: 1; }
+    .wm-rj   { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 26px; color: var(--dark-warm); letter-spacing: -0.04em; line-height: 1; }
+    .wm-period { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 28px; color: var(--terracotta); line-height: 1; margin-left: 1px; }
+    .tag { font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #18150F; background: rgba(168,201,106,0.14); border: 1px solid rgba(168,201,106,0.35); padding: 12px 20px; border-radius: 999px; }
+    .mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .contrast { display: flex; flex-direction: column; gap: 2px; margin-bottom: 60px; }
+    .line-muted { font-size: 96px; font-weight: 400; letter-spacing: -0.048em; line-height: 0.94; color: rgba(24,21,15,0.18); }
+    .line-bold { font-size: 96px; font-weight: 600; letter-spacing: -0.048em; line-height: 0.94; color: var(--dark-warm); }
+    .line-bold em { font-style: normal; color: var(--terracotta); }
+    .rule { height: 1px; background: rgba(24,21,15,0.1); margin-bottom: 40px; }
+    .body-copy { display: flex; flex-direction: column; }
+    .bc-line { font-size: 52px; font-weight: 300; letter-spacing: -0.03em; line-height: 1.28; color: rgba(24,21,15,0.45); }
+    .bc-line.accent { font-weight: 500; color: var(--terracotta); }
+    .bottom-bar { display: flex; align-items: center; justify-content: space-between; }
+    .op-tag { font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: 0.09em; text-transform: uppercase; color: #18150F; display: flex; align-items: center; gap: 14px; }
+    .op-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--terracotta); flex-shrink: 0; }
+    .airbnb-rating { font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: rgba(24,21,15,0.5); display: flex; align-items: center; gap: 6px; }
+    .airbnb-rating .star { color: var(--terracotta); font-size: 15px; }
+    .airbnb-rating .sep { width: 1px; height: 12px; background: rgba(24,21,15,0.2); }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="glow"></div>
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" aria-hidden="true">
+        <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch"/></filter>
+        <rect width="100%" height="100%" filter="url(#noise)"/>
+      </svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <span class="tag">resultados</span>
+        </div>
+        <div class="mid">
+          <div class="contrast">
+            <div class="line-muted">Isso não<br>é sorte.</div>
+            <div class="line-bold">É <em>operação.</em></div>
+          </div>
+          <div class="rule"></div>
+          <div class="body-copy">
+            <span class="bc-line">4,99 no Airbnb.</span>
+            <span class="bc-line">95% de ocupação.</span>
+            <span class="bc-line accent">Ano fechado.</span>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          <div class="op-tag"><span class="op-dot"></span>// gestão premium · rio de janeiro</div>
+          <div class="airbnb-rating"><span class="star">★</span><span class="sep"></span><span>4,99 airbnb</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="color:#333;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.06em">soul rj. &nbsp;·&nbsp; post-07 &nbsp;·&nbsp; prova · alltype pastel &nbsp;·&nbsp; 1080 × 1350 px</p>
+</body>
+</html>

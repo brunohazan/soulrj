@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Soul RJ — Feed Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #080808;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      gap: 20px;
+    }
+
+    /* ── Feed grid ──────────────────────────── */
+    .feed {
+      display: grid;
+      grid-template-columns: repeat(3, 210px);
+      gap: 3px;
+    }
+
+    .cell {
+      width: 210px;
+      height: 263px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Canvas ─────────────────────────────── */
+    .post {
+      width: 1080px;
+      height: 1350px;
+      transform: scale(0.19444);
+      transform-origin: top left;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Geist', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Shared across all ───────────────────── */
+    .stripe {
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, #b15a3c 0%, #d4764e 60%, transparent 100%);
+      z-index: 20;
+    }
+    .grain { position: absolute; inset: 0; z-index: 15; pointer-events: none; }
+    .content {
+      position: absolute; inset: 0; z-index: 10;
+      display: flex; flex-direction: column;
+    }
+    .top-bar { display: flex; align-items: flex-start; justify-content: space-between; }
+    .wm { display: inline-flex; align-items: baseline; padding: 14px 24px; border-radius: 999px; }
+    .wm-soul { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; font-size: 26px; letter-spacing: -0.04em; line-height: 1; }
+    .wm-rj   { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 26px; letter-spacing: -0.04em; line-height: 1; }
+    .wm-period { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 28px; color: #b15a3c; line-height: 1; margin-left: 1px; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px rgba(177,90,60,.15)}50%{box-shadow:0 0 0 10px rgba(177,90,60,0)} }
+    @keyframes pulse-lime { 0%,100%{box-shadow:0 0 0 4px rgba(214,255,61,.15)}50%{box-shadow:0 0 0 10px rgba(214,255,61,0)} }
+
+    /* ── FOTO POSTS ──────────────────────────── */
+    .t-foto .post { background: #0A0A0B; }
+    .t-foto .dot-grid {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at 50% 85%, #000 20%, transparent 65%);
+    }
+    .t-foto .photo { position: absolute; inset: 0; z-index: 2; }
+    .t-foto .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .t-foto .ov-top {
+      position: absolute; top: 0; left: 0; right: 0; height: 400px; z-index: 3;
+      background: linear-gradient(to bottom, rgba(10,10,11,.64) 0%, rgba(10,10,11,.20) 50%, transparent 100%);
+    }
+    .t-foto .ov-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 780px; z-index: 3;
+      background: linear-gradient(to top, rgba(10,10,11,1) 0%, rgba(10,10,11,.96) 20%, rgba(10,10,11,.85) 38%, rgba(10,10,11,.5) 55%, transparent 72%);
+    }
+    .t-foto .ov-glow { position: absolute; z-index: 4; pointer-events: none; border-radius: 50%; }
+    .t-foto .grain { mix-blend-mode: overlay; opacity: .07; }
+    .t-foto .content { padding: 60px 56px 56px; }
+    .t-foto .wm { background: rgba(10,10,11,.55); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.09); }
+    .t-foto .wm-soul { color: rgba(244,239,228,.82); }
+    .t-foto .wm-rj { color: #f4efe4; }
+    .t-foto .rating {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(10,10,11,.55); backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.09); padding: 14px 24px; border-radius: 999px;
+      font-family: 'Geist Mono', monospace;
+    }
+    .t-foto .r-star { color: #b15a3c; font-size: 20px; line-height: 1; }
+    .t-foto .r-val  { font-size: 18px; font-weight: 500; color: #f4efe4; letter-spacing: .02em; }
+    .t-foto .r-sep  { width: 1px; height: 16px; background: rgba(255,255,255,.12); }
+    .t-foto .r-cnt  { font-size: 13px; color: rgba(244,239,228,.42); letter-spacing: .04em; }
+    .t-foto .mid { flex: 1; }
+    .t-foto .bottom { display: flex; flex-direction: column; gap: 30px; }
+    .t-foto .op-tag {
+      font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: .09em;
+      text-transform: uppercase; color: rgba(214,255,61,.65);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .t-foto .op-pulse {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #D6FF3D; flex-shrink: 0; animation: pulse-lime 2.2s ease-in-out infinite;
+    }
+    .t-foto .prop-name { font-weight: 500; font-size: 84px; line-height: .96; letter-spacing: -.045em; color: #f4efe4; }
+    .t-foto .prop-name em { display: block; font-style: italic; font-weight: 300; color: rgba(244,239,228,.55); font-size: 76px; }
+    .t-foto .rule { height: 1px; background: rgba(255,255,255,.10); }
+    .t-foto .stats { display: flex; }
+    .t-foto .stat { flex: 1; display: flex; flex-direction: column; gap: 9px; }
+    .t-foto .stat + .stat { border-left: 1px solid rgba(255,255,255,.09); padding-left: 38px; }
+    .t-foto .s-k { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; color: rgba(244,239,228,.38); }
+    .t-foto .s-v { font-size: 42px; font-weight: 500; letter-spacing: -.035em; line-height: 1; color: #f4efe4; }
+    .t-foto .s-v.accent { color: #D6FF3D; }
+
+    /* ── DARK TYPE ───────────────────────────── */
+    .t-dark .post { background: #0A0A0B; }
+    .t-dark .dot-grid {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 30%, transparent 100%);
+    }
+    .t-dark .glow {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 900px; height: 900px; z-index: 2; pointer-events: none;
+      background: radial-gradient(circle, rgba(214,255,61,.055) 0%, transparent 60%);
+    }
+    .t-dark .corner { position: absolute; width: 48px; height: 48px; z-index: 3; pointer-events: none; }
+    .t-dark .corner-tl { top:20px;left:20px; border-top:2px solid rgba(255,255,255,.18);border-left:2px solid rgba(255,255,255,.18); }
+    .t-dark .corner-tr { top:20px;right:20px; border-top:2px solid rgba(255,255,255,.18);border-right:2px solid rgba(255,255,255,.18); }
+    .t-dark .corner-bl { bottom:20px;left:20px; border-bottom:2px solid rgba(255,255,255,.18);border-left:2px solid rgba(255,255,255,.18); }
+    .t-dark .corner-br { bottom:20px;right:20px; border-bottom:2px solid rgba(255,255,255,.18);border-right:2px solid rgba(255,255,255,.18); }
+    .t-dark .grain { mix-blend-mode: overlay; opacity: .065; }
+    .t-dark .content { padding: 60px 80px 64px; }
+    .t-dark .wm { background: rgba(10,10,11,.55); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.09); }
+    .t-dark .wm-soul { color: rgba(244,239,228,.82); }
+    .t-dark .wm-rj { color: #f4efe4; }
+    .t-dark .tag {
+      font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(244,239,228,.7);
+      background: rgba(177,90,60,.15); border: 1px solid rgba(177,90,60,.35);
+      padding: 12px 20px; border-radius: 999px;
+    }
+    .t-dark .mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .t-dark .contrast { display: flex; flex-direction: column; gap: 4px; margin-bottom: 64px; }
+    .t-dark .line-muted { font-size: 96px; font-weight: 400; letter-spacing: -.048em; line-height: .94; color: rgba(244,239,228,.18); }
+    .t-dark .line-bold { font-size: 96px; font-weight: 600; letter-spacing: -.048em; line-height: .94; color: #f4efe4; }
+    .t-dark .line-bold em { font-style: normal; color: #D6FF3D; }
+    .t-dark .rule { height: 1px; background: rgba(255,255,255,.09); margin-bottom: 40px; }
+    .t-dark .body-copy { display: flex; flex-direction: column; }
+    .t-dark .bc-line { font-size: 52px; font-weight: 300; letter-spacing: -.03em; line-height: 1.12; color: rgba(244,239,228,.55); }
+    .t-dark .bc-line.accent { font-weight: 500; color: #D6FF3D; }
+    .t-dark .bottom-bar { display: flex; align-items: center; justify-content: space-between; }
+    .t-dark .op-tag {
+      font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: .09em;
+      text-transform: uppercase; color: rgba(255,255,255,.28);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .t-dark .op-pulse {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #b15a3c; flex-shrink: 0; animation: pulse 2.2s ease-in-out infinite;
+    }
+    .t-dark .airbnb-rating {
+      font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: .06em;
+      color: rgba(255,255,255,.28); display: flex; align-items: center; gap: 6px;
+    }
+    .t-dark .airbnb-rating .star { color: #b15a3c; font-size: 15px; }
+    .t-dark .airbnb-rating .sep { width: 1px; height: 12px; background: rgba(255,255,255,.15); }
+
+    /* ── PASTEL TYPE ─────────────────────────── */
+    .t-pastel .post { background: #EDE8DF; }
+    .t-pastel .dot-grid {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-image: radial-gradient(rgba(24,21,15,.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 20%, transparent 100%);
+    }
+    .t-pastel .glow {
+      position: absolute; top: 30%; left: -10%; width: 800px; height: 800px; z-index: 1;
+      background: radial-gradient(circle, rgba(184,92,62,.07) 0%, transparent 60%); pointer-events: none;
+    }
+    .t-pastel .corner { position: absolute; width: 48px; height: 48px; z-index: 3; pointer-events: none; }
+    .t-pastel .corner-tl { top:20px;left:20px; border-top:2px solid #A8C96A;border-left:2px solid #A8C96A; }
+    .t-pastel .corner-tr { top:20px;right:20px; border-top:2px solid #A8C96A;border-right:2px solid #A8C96A; }
+    .t-pastel .corner-bl { bottom:20px;left:20px; border-bottom:2px solid #A8C96A;border-left:2px solid #A8C96A; }
+    .t-pastel .corner-br { bottom:20px;right:20px; border-bottom:2px solid #A8C96A;border-right:2px solid #A8C96A; }
+    .t-pastel .grain { mix-blend-mode: multiply; opacity: .045; }
+    .t-pastel .content { padding: 60px 80px 64px; }
+    .t-pastel .wm { background: rgba(237,232,223,.7); backdrop-filter: blur(12px); border: 1px solid rgba(168,201,106,.6); align-items: center; justify-content: center; }
+    .t-pastel .wm-soul { color: rgba(24,21,15,.55); }
+    .t-pastel .wm-rj { color: #18150F; }
+    .t-pastel .tag {
+      font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: .08em;
+      text-transform: uppercase; color: #18150F;
+      background: rgba(168,201,106,.14); border: 1px solid rgba(168,201,106,.35);
+      padding: 12px 20px; border-radius: 999px;
+    }
+    .t-pastel .mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .t-pastel .contrast { display: flex; flex-direction: column; gap: 2px; margin-bottom: 60px; }
+    .t-pastel .line-muted { font-size: 96px; font-weight: 400; letter-spacing: -.048em; line-height: .94; color: rgba(24,21,15,.18); }
+    .t-pastel .line-bold { font-size: 96px; font-weight: 600; letter-spacing: -.048em; line-height: .94; color: #18150F; }
+    .t-pastel .line-bold em { font-style: normal; color: #b15a3c; }
+    .t-pastel .rule { height: 1px; background: rgba(24,21,15,.1); margin-bottom: 40px; }
+    .t-pastel .body-copy { display: flex; flex-direction: column; }
+    .t-pastel .bc-line { font-size: 52px; font-weight: 300; letter-spacing: -.03em; line-height: 1.12; color: rgba(24,21,15,.45); }
+    .t-pastel .bc-line.accent { font-weight: 500; color: #b15a3c; }
+    .t-pastel .bottom-bar { display: flex; align-items: center; justify-content: space-between; }
+    .t-pastel .op-tag {
+      font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: .09em;
+      text-transform: uppercase; color: #18150F;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .t-pastel .op-dot { width: 7px; height: 7px; border-radius: 50%; background: #b15a3c; flex-shrink: 0; }
+    .t-pastel .airbnb-rating {
+      font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: .06em;
+      color: rgba(24,21,15,.5); display: flex; align-items: center; gap: 6px;
+    }
+    .t-pastel .airbnb-rating .star { color: #b15a3c; font-size: 15px; }
+    .t-pastel .airbnb-rating .sep { width: 1px; height: 12px; background: rgba(24,21,15,.2); }
+
+    /* ── Label ───────────────────────────────── */
+    .lbl {
+      font-family: 'Geist Mono', monospace; font-size: 11px;
+      letter-spacing: .08em; color: rgba(255,255,255,.15);
+      text-align: center; text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+<div class="feed">
+
+  <!-- ══ LINHA 1 ═══════════════════════════════ -->
+
+  <!-- 1 · foto-01 · Copacabana 100m -->
+  <div class="cell t-foto">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="photo"><img src="post-01.html" alt="" style="display:none"><!-- fallback --></div>
+      <div class="photo" style="position:absolute;inset:0;z-index:2;">
+        <img src="../docs/100m da praia - Sofisticado e silencioso.avif" alt="Copacabana 100m" style="object-position:center 40%;">
+      </div>
+      <div class="ov-top"></div>
+      <div class="ov-bottom"></div>
+      <div class="ov-glow" style="bottom:-80px;left:-120px;width:700px;height:700px;background:radial-gradient(circle,rgba(177,90,60,.18) 0%,transparent 65%);"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n1"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n1)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <div class="rating"><span class="r-star">★</span><span class="r-val">4,99</span><span class="r-sep"></span><span class="r-cnt">27 avaliações</span></div>
+        </div>
+        <div class="mid"></div>
+        <div class="bottom">
+          <div class="op-tag"><span class="op-pulse"></span>// 01 · copacabana · ativo</div>
+          <h2 class="prop-name">100m da praia<em>sofisticado e silencioso</em></h2>
+          <div class="rule"></div>
+          <div class="stats">
+            <div class="stat"><span class="s-k">Quartos</span><span class="s-v">1</span></div>
+            <div class="stat"><span class="s-k">Camas</span><span class="s-v">3</span></div>
+            <div class="stat"><span class="s-k">Ocupação</span><span class="s-v accent">95%</span></div>
+            <div class="stat"><span class="s-k">Reviews</span><span class="s-v">27</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · dark type -->
+  <div class="cell t-dark">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="glow"></div>
+      <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n2"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n2)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <span class="tag">diferencial</span>
+        </div>
+        <div class="mid">
+          <div class="contrast">
+            <div class="line-muted">Gestoras comuns<br>padronizam.</div>
+            <div class="line-bold">A Soul RJ<br><em>personaliza.</em></div>
+          </div>
+          <div class="rule"></div>
+          <div class="body-copy">
+            <span class="bc-line">Cada detalhe,</span>
+            <span class="bc-line">cada hóspede,</span>
+            <span class="bc-line accent">cada real.</span>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          <div class="op-tag"><span class="op-pulse"></span>// gestão premium · rio de janeiro</div>
+          <div class="airbnb-rating"><span class="star">★</span><span class="sep"></span><span>4,99 airbnb</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · pastel type -->
+  <div class="cell t-pastel">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="glow"></div>
+      <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n3"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n3)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <span class="tag">diferencial</span>
+        </div>
+        <div class="mid">
+          <div class="contrast">
+            <div class="line-muted">Gestoras comuns<br>padronizam.</div>
+            <div class="line-bold">A Soul RJ<br><em>personaliza.</em></div>
+          </div>
+          <div class="rule"></div>
+          <div class="body-copy">
+            <span class="bc-line">Cada detalhe,</span>
+            <span class="bc-line">cada hóspede,</span>
+            <span class="bc-line accent">cada real.</span>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          <div class="op-tag"><span class="op-dot"></span>// gestão premium · rio de janeiro</div>
+          <div class="airbnb-rating"><span class="star">★</span><span class="sep"></span><span>4,99 airbnb</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LINHA 2 ═══════════════════════════════ -->
+
+  <!-- 4 · pastel type -->
+  <div class="cell t-pastel">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="glow"></div>
+      <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n4"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n4)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <span class="tag">diferencial</span>
+        </div>
+        <div class="mid">
+          <div class="contrast">
+            <div class="line-muted">Gestoras comuns<br>padronizam.</div>
+            <div class="line-bold">A Soul RJ<br><em>personaliza.</em></div>
+          </div>
+          <div class="rule"></div>
+          <div class="body-copy">
+            <span class="bc-line">Cada detalhe,</span>
+            <span class="bc-line">cada hóspede,</span>
+            <span class="bc-line accent">cada real.</span>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          <div class="op-tag"><span class="op-dot"></span>// gestão premium · rio de janeiro</div>
+          <div class="airbnb-rating"><span class="star">★</span><span class="sep"></span><span>4,99 airbnb</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · foto-02 · Copacabana 4 hóspedes -->
+  <div class="cell t-foto">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="photo">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTAyNzQ3OTM4OTcwMTE4MTg3OA%3D%3D/original/93244bdd-b528-41fc-9ff7-1e5b22035c66.jpeg?im_w=720" alt="Copacabana 4p" style="object-position:center 35%;">
+      </div>
+      <div class="ov-top"></div>
+      <div class="ov-bottom"></div>
+      <div class="ov-glow" style="bottom:-80px;right:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(60,130,177,.14) 0%,transparent 65%);"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n5"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n5)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <div class="rating"><span class="r-star">★</span><span class="r-val">4,99</span><span class="r-sep"></span><span class="r-cnt">186 avaliações</span></div>
+        </div>
+        <div class="mid"></div>
+        <div class="bottom">
+          <div class="op-tag"><span class="op-pulse"></span>// 02 · copacabana · ativo</div>
+          <h2 class="prop-name">150m da praia · 142m²<em>Copacabana 4 hóspedes</em></h2>
+          <div class="rule"></div>
+          <div class="stats">
+            <div class="stat"><span class="s-k">Quartos</span><span class="s-v">3</span></div>
+            <div class="stat"><span class="s-k">Hóspedes</span><span class="s-v">4</span></div>
+            <div class="stat"><span class="s-k">Ocupação</span><span class="s-v accent">95%</span></div>
+            <div class="stat"><span class="s-k">Reviews</span><span class="s-v">186</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · dark type -->
+  <div class="cell t-dark">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="glow"></div>
+      <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n6"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n6)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <span class="tag">diferencial</span>
+        </div>
+        <div class="mid">
+          <div class="contrast">
+            <div class="line-muted">Gestoras comuns<br>padronizam.</div>
+            <div class="line-bold">A Soul RJ<br><em>personaliza.</em></div>
+          </div>
+          <div class="rule"></div>
+          <div class="body-copy">
+            <span class="bc-line">Cada detalhe,</span>
+            <span class="bc-line">cada hóspede,</span>
+            <span class="bc-line accent">cada real.</span>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          <div class="op-tag"><span class="op-pulse"></span>// gestão premium · rio de janeiro</div>
+          <div class="airbnb-rating"><span class="star">★</span><span class="sep"></span><span>4,99 airbnb</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LINHA 3 ═══════════════════════════════ -->
+
+  <!-- 7 · dark type -->
+  <div class="cell t-dark">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="glow"></div>
+      <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n7"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n7)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <span class="tag">diferencial</span>
+        </div>
+        <div class="mid">
+          <div class="contrast">
+            <div class="line-muted">Gestoras comuns<br>padronizam.</div>
+            <div class="line-bold">A Soul RJ<br><em>personaliza.</em></div>
+          </div>
+          <div class="rule"></div>
+          <div class="body-copy">
+            <span class="bc-line">Cada detalhe,</span>
+            <span class="bc-line">cada hóspede,</span>
+            <span class="bc-line accent">cada real.</span>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          <div class="op-tag"><span class="op-pulse"></span>// gestão premium · rio de janeiro</div>
+          <div class="airbnb-rating"><span class="star">★</span><span class="sep"></span><span>4,99 airbnb</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 · pastel type -->
+  <div class="cell t-pastel">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="glow"></div>
+      <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n8"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n8)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <span class="tag">diferencial</span>
+        </div>
+        <div class="mid">
+          <div class="contrast">
+            <div class="line-muted">Gestoras comuns<br>padronizam.</div>
+            <div class="line-bold">A Soul RJ<br><em>personaliza.</em></div>
+          </div>
+          <div class="rule"></div>
+          <div class="body-copy">
+            <span class="bc-line">Cada detalhe,</span>
+            <span class="bc-line">cada hóspede,</span>
+            <span class="bc-line accent">cada real.</span>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          <div class="op-tag"><span class="op-dot"></span>// gestão premium · rio de janeiro</div>
+          <div class="airbnb-rating"><span class="star">★</span><span class="sep"></span><span>4,99 airbnb</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 · foto-03 · Leblon piscina -->
+  <div class="cell t-foto">
+    <div class="post">
+      <div class="stripe"></div>
+      <div class="dot-grid"></div>
+      <div class="photo">
+        <img src="../docs/Leblon 5min a pé da Praia · Piscina.avif" alt="Leblon piscina" style="object-position:center 30%;">
+      </div>
+      <div class="ov-top"></div>
+      <div class="ov-bottom"></div>
+      <div class="ov-glow" style="bottom:-60px;left:-80px;width:650px;height:650px;background:radial-gradient(circle,rgba(60,177,155,.12) 0%,transparent 65%);"></div>
+      <svg class="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><filter id="n9"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n9)"/></svg>
+      <div class="content">
+        <div class="top-bar">
+          <div class="wm"><span class="wm-soul">soul</span><span class="wm-rj">rj</span><span class="wm-period">.</span></div>
+          <div class="rating"><span class="r-star">★</span><span class="r-val">4,95</span><span class="r-sep"></span><span class="r-cnt">piscina privativa</span></div>
+        </div>
+        <div class="mid"></div>
+        <div class="bottom">
+          <div class="op-tag"><span class="op-pulse"></span>// 03 · leblon · ativo</div>
+          <h2 class="prop-name">Leblon · piscina<em>5min a pé da praia</em></h2>
+          <div class="rule"></div>
+          <div class="stats">
+            <div class="stat"><span class="s-k">Quartos</span><span class="s-v">2</span></div>
+            <div class="stat"><span class="s-k">Área</span><span class="s-v">95m²</span></div>
+            <div class="stat"><span class="s-k">Ocupação</span><span class="s-v accent">95%</span></div>
+            <div class="stat"><span class="s-k">Reviews</span><span class="s-v">21</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="lbl">soul rj. · sugestão de feed · foto — escuro — pastel (diagonal)</p>
+
+</body>
+</html>
